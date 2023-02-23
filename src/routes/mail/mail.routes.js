@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const router = Router()
 
-const mailerFactory = require('../../factories/mailer/mailer.factory')
+const mailerFactory = require('../../factories/mail/mail.factory')
 
 router.post('/', mailerFactory.send.bind(mailerFactory))
 

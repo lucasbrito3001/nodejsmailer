@@ -1,6 +1,6 @@
 import { expect } from 'vitest'
 import { describe, test, vi } from 'vitest'
-const MailerService = require('./mailerService.service')
+const MailerService = require('./mail.service')
 
 const createTransport = vi.fn()
 const sendMail = vi.fn()

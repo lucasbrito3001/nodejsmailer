@@ -5,7 +5,9 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const mailerRoutes = require('./routes/mailer/mailerRoutes.routes')
+const mailerRoutes = require('./routes/mail/mail.routes')
+
+const responseFactory = require('./factories/response/response.factory')
 
 const app = express()
 
@@ -19,8 +21,6 @@ app.get('/', (req, res) => {
 
 app.use('/email', mailerRoutes)
 
-app.use((req, res) => {
-    res.status(req.HTTP_STATUS).json({ status: req.RES_STATUS, content: req.content, message: req.message })
-})
+app.use(responseFactory.send.bind(responseFactory))
 
 module.exports = app

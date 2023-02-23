@@ -5,7 +5,7 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const mailTransporter = require('./services/nodemailer')
+const mailerRoutes = require('./routes/mailer/mailerRoutes.routes')
 
 const app = express()
 
@@ -17,23 +17,10 @@ app.get('/', (req, res) => {
     res.send('Hello world, nodejsmailer from Lucas de Brito')
 })
 
-app.post('/email', async (req, res) => {
-    try {
-        const { subject, text } = req.body
+app.use('/email', mailerRoutes)
 
-        const result = await mailTransporter.sendMail({
-            from: process.env.NODE_MAILER_USER,
-            to: process.env.NODE_MAILER_USER,
-            subject,
-            text
-        })
-
-        console.log(result)
-
-        res.status(200).send({ status: true, message: 'Email sucessfully sent.' })
-    } catch (error) {
-        res.status(500).send({ status: false, message: 'Error sending email', error })
-    }
+app.use((req, res) => {
+    res.status(req.HTTP_STATUS).json({ status: req.RES_STATUS, content: req.content, message: req.message })
 })
 
 module.exports = app

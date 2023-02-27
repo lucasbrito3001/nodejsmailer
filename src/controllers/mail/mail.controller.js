@@ -11,12 +11,16 @@ class MailerController {
     async send(req, res, next) {
         try {
             const { subject, text } = req.body
-
+            
             const transporter = await this.#mailerService.createTransporter(
-                process.env.MAILER_SMTP_CONFIG,
-                process.env.SMTP_USER,
-                process.env.SMTP_PASSWORD
+                process.env.MAILER_SMTP_HOST,
+                process.env.MAILER_SMTP_PORT,
+                process.env.NODE_ENV === 'production',
+                process.env.MAILER_USER,
+                process.env.MAILER_PASSWORD
             )
+            
+            if(transporter.status === false) throw new Error(transporter.error)
 
             const resultMail = await transporter.sendMail(
                 process.env.MAILER_USER, 
@@ -24,15 +28,15 @@ class MailerController {
                 subject, 
                 text
             )
-
-            if(resultMail === false) throw new Error('Erro interno do servidor, na conexão com sistema de email')
+                
+            if(resultMail.status === false) throw new Error(resultMail.error)
     
             req.HTTP_STATUS_CODE = 200
             req.STATUS_BOOLEAN = true
             req.content = resultMail
             req.message = 'Email enviado com sucesso'
         } catch (error) {
-            console.log(error)
+            console.log(error.message)
             
             req.HTTP_STATUS_CODE = 500
             req.STATUS_BOOLEAN = false

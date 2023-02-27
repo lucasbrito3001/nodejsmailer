@@ -5,10 +5,12 @@ class Mailer {
         this.#mailerModule = mailerModule
     }
 
-    createTransporter(smtpService, user, pass) {
+    createTransporter(smtpHost, smtpPort, smtpSecure, user, pass) {
         try {
             const transporter = this.#mailerModule.createTransport({
-                service: smtpService,
+                host: smtpHost,
+                port: smtpPort,
+                secure: smtpSecure,
                 auth: { user, pass },
                 tls: { rejectUnauthorized: false }
             })

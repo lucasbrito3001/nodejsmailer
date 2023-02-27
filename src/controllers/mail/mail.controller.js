@@ -15,7 +15,7 @@ class MailerController {
             const transporter = await this.#mailerService.createTransporter(
                 process.env.MAILER_SMTP_HOST,
                 process.env.MAILER_SMTP_PORT,
-                process.env.NODE_ENV === 'production',
+                false,
                 process.env.MAILER_USER,
                 process.env.MAILER_PASSWORD
             )
